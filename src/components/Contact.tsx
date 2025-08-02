@@ -13,7 +13,7 @@ declare global {
 
 export default function Contact() {
   useEffect(() => {
-    // Tally 스크립트 로드
+    // Tally 스크립트 로드 (공식 embed 코드 방식)
     const script = document.createElement('script')
     script.src = 'https://tally.so/widgets/embed.js'
     script.async = true
@@ -152,10 +152,10 @@ export default function Contact() {
 
               <div className="bg-white rounded-lg shadow-lg p-6">
                 <iframe 
-                  data-tally-src="https://tally.so/forms/wdL8Yj/embed" 
+                  data-tally-src="https://tally.so/embed/wMpB9X?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
                   loading="lazy" 
                   width="100%" 
-                  height={552} 
+                  height={424} 
                   frameBorder="0" 
                   marginHeight={0} 
                   marginWidth={0} 

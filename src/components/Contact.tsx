@@ -2,6 +2,15 @@
 
 import { useEffect } from 'react'
 
+// Tally 타입 정의
+declare global {
+  interface Window {
+    Tally?: {
+      loadEmbeds: () => void
+    }
+  }
+}
+
 export default function Contact() {
   useEffect(() => {
     // Tally 스크립트 로드
@@ -154,10 +163,10 @@ export default function Contact() {
                   data-tally-src="https://tally.so/embed/wMpB9X?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
                   loading="lazy" 
                   width="100%" 
-                  height="600" 
+                  height={600}
                   frameBorder="0" 
-                  marginHeight="0" 
-                  marginWidth="0" 
+                  marginHeight={0} 
+                  marginWidth={0} 
                   title="인사이트 허브 수강신청"
                   className="rounded-lg"
                   style={{ minHeight: '600px' }}

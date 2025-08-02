@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react'
 
 export default function FloatingCTA() {
   const [timeLeft, setTimeLeft] = useState({
-    hours: 35,
-    minutes: 59,
-    seconds: 59
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   })
 
   const [isVisible, setIsVisible] = useState(false)
@@ -21,35 +21,43 @@ export default function FloatingCTA() {
   }, [])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev
-        
-        seconds -= 1
-        
-        if (seconds < 0) {
-          seconds = 59
-          minutes -= 1
-        }
-        
-        if (minutes < 0) {
-          minutes = 59
-          hours -= 1
-        }
-        
-        if (hours < 0) {
-          // 36시간이 지나면 다시 36시간으로 리셋
-          hours = 35
-          minutes = 59
-          seconds = 59
-        }
-        
-        return { hours, minutes, seconds }
-      })
-    }, 1000) // 1초마다 업데이트
+    // 절대적인 카운트다운 시작 시간 설정 (2024년 1월 20일 오후 2시)
+    const countdownStartTime = new Date('2024-01-20T14:00:00').getTime()
+    const countdownDuration = 36 * 60 * 60 * 1000 // 36시간을 밀리초로
+    const countdownEndTime = countdownStartTime + countdownDuration
+
+    const updateCountdown = () => {
+      const now = new Date().getTime()
+      const timeDifference = countdownEndTime - now
+
+      if (timeDifference > 0) {
+        // 남은 시간 계산
+        const hours = Math.floor(timeDifference / (1000 * 60 * 60))
+        const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000)
+
+        setTimeLeft({ hours, minutes, seconds })
+      } else {
+        // 카운트다운이 끝났을 때
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 })
+      }
+    }
+
+    // 초기 카운트다운 설정
+    updateCountdown()
+
+    // 1초마다 업데이트
+    const timer = setInterval(updateCountdown, 1000)
 
     return () => clearInterval(timer)
   }, [])
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <div className={`fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'}`}>
@@ -63,7 +71,10 @@ export default function FloatingCTA() {
         </div>
         
         {/* 수강신청하기 버튼 */}
-        <button className="w-full bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg text-sm animate-bounce">
+        <button 
+          onClick={scrollToContact}
+          className="w-full bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg text-sm animate-bounce"
+        >
           📚 수강신청하기
         </button>
         

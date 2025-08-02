@@ -1,4 +1,13 @@
+'use client'
+
 export default function CTA() {
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact')
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <section className="py-20 bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-700 text-white">
       <div className="container mx-auto px-4">
@@ -31,7 +40,10 @@ export default function CTA() {
           </div>
           
           <div className="space-y-4">
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105 shadow-lg">
+            <button 
+              onClick={scrollToContact}
+              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105 shadow-lg"
+            >
               📚 무료 전자책 다운로드
             </button>
             <div className="text-sm opacity-80">

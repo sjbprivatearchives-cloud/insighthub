@@ -12,84 +12,8 @@ declare global {
 }
 
 export default function Footer() {
-  useEffect(() => {
-    // Tally 스크립트 로드
-    const loadTallyScript = () => {
-      if (typeof window !== 'undefined' && !window.Tally) {
-        const script = document.createElement('script')
-        script.src = 'https://tally.so/widgets/embed.js'
-        script.async = true
-        script.onload = () => {
-          if (window.Tally) {
-            window.Tally.loadEmbeds()
-          }
-        }
-        document.body.appendChild(script)
-      } else if (window.Tally) {
-        window.Tally.loadEmbeds()
-      }
-    }
-
-    loadTallyScript()
-
-    return () => {
-      // 컴포넌트 언마운트 시 정리
-      const existingScript = document.querySelector('script[src="https://tally.so/widgets/embed.js"]')
-      if (existingScript) {
-        document.body.removeChild(existingScript)
-      }
-    }
-  }, [])
-
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-      {/* 수강신청 섹션 */}
-      <div className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 text-white">
-                지금 바로 수강신청하세요!
-              </h2>
-              <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                인사이트 허브와 함께 이커머스 성공의 길로 나아가세요.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-2xl p-8">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  수강신청 폼
-                </h3>
-                <p className="text-gray-600">
-                  아래 폼을 작성해주시면 빠른 시일 내에 연락드리겠습니다.
-                </p>
-              </div>
-
-              <div className="bg-gray-50 rounded-xl p-6">
-                <iframe 
-                  data-tally-src="https://tally.so/embed/wMpB9X?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
-                  loading="lazy" 
-                  width="100%" 
-                  height={424}
-                  frameBorder="0" 
-                  marginHeight={0} 
-                  marginWidth={0} 
-                  title="인사이트 허브 수강신청"
-                  className="rounded-lg"
-                />
-              </div>
-
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-500">
-                  문의사항이 있으시면 <a href="mailto:sjb.privatearchives@gmail.com" className="text-blue-600 hover:underline font-medium">sjb.privatearchives@gmail.com</a>으로 연락주세요.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* 기존 Footer 정보 */}
       <div className="py-12">
         <div className="container mx-auto px-4">

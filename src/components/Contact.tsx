@@ -2,41 +2,50 @@
 
 import { useEffect } from 'react'
 
-// Tally 타입 정의
-declare global {
-  interface Window {
-    Tally?: {
-      loadEmbeds: () => void
-    }
-  }
-}
-
 export default function Contact() {
   useEffect(() => {
-    // Tally 스크립트 로드
-    const loadTallyScript = () => {
-      if (typeof window !== 'undefined' && !window.Tally) {
-        const script = document.createElement('script')
-        script.src = 'https://tally.so/widgets/embed.js'
-        script.async = true
-        script.onload = () => {
-          if (window.Tally) {
-            window.Tally.loadEmbeds()
+    // 폼 제출 이벤트 리스너 추가
+    const form = document.getElementById("applyForm") as HTMLFormElement
+    if (form) {
+      form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const nameInput = document.querySelector("input[name='name']") as HTMLInputElement
+        const phoneInput = document.querySelector("input[name='phone']") as HTMLInputElement
+        const emailInput = document.querySelector("input[name='email']") as HTMLInputElement
+
+        const name = nameInput?.value.trim() || ''
+        const phone = phoneInput?.value.trim() || ''
+        const email = emailInput?.value.trim() || ''
+
+        fetch("https://script.google.com/macros/s/AKfycby1QghT3TaSB5b4r5YTMTZhZhB34fSfUEhOuxCywNWIFlCBC7cB_Rl0_pQq8ly40fCk/exec", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, phone, email })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.result === "success") {
+            alert("수강 신청이 완료되었습니다!");
+            form.reset();
+          } else {
+            alert("신청 중 오류가 발생했습니다.");
           }
-        }
-        document.head.appendChild(script)
-      } else if (window.Tally) {
-        window.Tally.loadEmbeds()
-      }
+        })
+        .catch(err => {
+          console.error("에러:", err);
+          alert("서버에 접속할 수 없습니다.");
+        });
+      });
     }
 
-    loadTallyScript()
-
     return () => {
-      // 컴포넌트 언마운트 시 정리
-      const existingScript = document.querySelector('script[src="https://tally.so/widgets/embed.js"]')
-      if (existingScript) {
-        document.head.removeChild(existingScript)
+      // 컴포넌트 언마운트 시 이벤트 리스너 제거
+      const form = document.getElementById("applyForm") as HTMLFormElement
+      if (form) {
+        form.removeEventListener("submit", function() {});
       }
     }
   }, [])
@@ -147,7 +156,7 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Tally 수강신청 폼 */}
+            {/* 수강신청 폼 */}
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -158,20 +167,56 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-6">
-                <iframe 
-                  data-tally-src="https://tally.so/embed/wMpB9X?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" 
-                  loading="lazy" 
-                  width="100%" 
-                  height={600}
-                  frameBorder="0" 
-                  marginHeight={0} 
-                  marginWidth={0} 
-                  title="인사이트 허브 수강신청"
-                  className="rounded-lg"
-                  style={{ minHeight: '600px' }}
-                />
-              </div>
+              <form id="applyForm" className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    이름 *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="이름을 입력하세요"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    휴대폰번호 *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="휴대폰번호를 입력하세요"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    이메일 *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="이메일을 입력하세요"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors duration-200 flex items-center justify-center"
+                >
+                  Submit →
+                </button>
+              </form>
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-gray-500">
